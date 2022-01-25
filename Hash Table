@@ -1,0 +1,174 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define size 10
+struct node
+{
+int num;
+    struct node *next;
+};
+struct node *hash_table[size];
+void create_hash_table()
+{
+    int i;
+    for(i=0;i<size;i++)
+    {
+        hash_table[i] = (struct node*)malloc(sizeof(struct node));
+        hash_table[i]->num = -1;
+        hash_table[i]->next = NULL;
+    }
+}
+void add()
+{
+int key, value;
+printf("Enter the value\n");
+    scanf("%d", &value);
+    key = value % size;
+    if(hash_table[key]->num == -1)
+    {
+        hash_table[key]->num = value;
+    }
+    else
+    {
+        struct node *current, *pos;
+        current = (struct node*)malloc(sizeof(struct node));
+        current->num = value;
+        current->next = NULL;
+        pos = hash_table[key];
+        while(pos->next != NULL)
+        {
+            pos = pos->next;
+        }
+        pos->next = current;
+    }
+}
+void search()
+{
+int key, value, found = 0;
+    printf("Enter the value to be searched\n");
+    scanf("%d", &value);
+    key = value % size;
+    if(hash_table[key]->num == value)
+    {
+        found = 1;
+    }
+    else
+    {
+        struct node *pos = hash_table[key]->next;
+        while(pos != NULL)
+        {
+            if(pos->num == value)
+            {
+                found = 1;
+                break;
+            }
+            pos = pos->next;
+        }
+    }
+    if(found)
+    {
+        printf("Found\n");
+    }
+    else
+    {
+        printf("Not found\n");
+    }
+}
+void del()
+{
+int key, value, found = 0;
+    printf("Enter the value to be deleted\n");
+    scanf("%d", &value);
+    key = value % size;
+    if(hash_table[key]->num == value )
+    {
+        found = 1;
+        if(hash_table[key]->next == NULL)
+        {
+            hash_table[key]->num = -1;
+        }
+        else
+        {
+            struct node *pos = hash_table[key];
+            hash_table[key] = pos->next;
+            free(pos);
+        }
+    }
+    else
+    {
+        struct node *prev = hash_table[key], *pos = hash_table[key]->next;
+        while(pos != NULL)
+        {
+            if(pos->num == value)
+            {
+                prev->next = pos->next;
+                free(pos);
+                found = 1;
+                break;
+            }
+            prev = pos;
+            pos = pos->next;
+        }
+    }
+    if(found == 1)
+    {
+        printf("%d is deleted successfully\n", value);
+    }
+    else
+    {
+        printf("Not found\n");
+    }
+}
+void traverse()
+{
+    int i;
+for(i = 0; i <= size - 1; i++)
+    {
+        struct node *pos = hash_table[i];
+        if(pos->num != -1)
+        {
+            while(pos != NULL)
+            {
+                printf("%d ", pos->num);
+                pos = pos->next;
+            }
+        }
+    }
+    printf("\n");
+}
+int main()
+{
+int ch;
+create_hash_table();
+do
+    {
+        printf("Enter 1 to insert in hash table\n");
+        printf("Enter 2 to view all elements of hash table\n");
+        printf("Enter 3 to search an element in hash table\n");
+        printf("Enter 4 to delete an element in hash table\n");
+        printf("Enter 5 to exit\n");
+        scanf("%d", &ch);
+        switch(ch)
+        {
+            case 1:
+                add();
+                break;
+            case 2:
+                traverse();
+                break;
+            case 3:
+                search();
+                break;
+            case 4:
+                del();
+                break;
+            case 5:
+                exit(0);
+            default:
+                printf("Wrong choice entered\n");
+        }
+        printf("Enter 0 to continue\n");
+        scanf("%d", &ch);
+    }
+    while(ch == 0);
+    return 0;
+}
