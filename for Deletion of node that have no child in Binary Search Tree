@@ -1,0 +1,124 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node
+{
+int num;
+   struct node *left;
+   struct node *right;
+}node;
+node *root = NULL;
+node * insert(node *pos, int n)
+{
+if(pos == NULL)
+    {
+        pos = (node *)malloc(sizeof(node));
+        pos->num = n;
+        pos->left = NULL;
+        pos->right = NULL;
+    }
+    else if(n < pos->num)
+    {
+        pos->left = insert(pos->left, n);
+    }
+    else
+    {
+        pos->right = insert(pos->right, n);
+    }
+    return pos;
+}
+void inorder(node *pos)
+{
+if(pos != NULL)
+   {
+        inorder(pos->left);
+        printf("%d ", pos->num);
+        inorder(pos->right);
+   }
+}
+void del(node *pos, int n)
+{
+if(root != NULL)
+    {
+        pos = root;
+        node *parent = NULL;
+        while(pos != NULL)
+        {
+if(n == pos->num)
+            {
+                break;
+            }
+            parent = pos;
+            if(n < pos->num)
+            {
+                pos = pos->left;
+            }
+            else
+            {
+                pos = pos->right;
+            }
+        }
+        if(pos != NULL)
+        {
+            int n = pos->num;
+            printf("\n%d is deleted successfully\n", n);
+if(pos->left == NULL && pos->right == NULL)
+            {
+                if(pos == parent->left)
+                {
+                    parent->left = NULL;
+                }
+                else
+                {
+                    parent->right = NULL;
+                }
+            }
+            free(pos);
+        }
+        else
+        {
+            printf("\n%d does not exist in BST\n", n);
+        }
+    }
+    else
+    {
+        printf("\nTree is empty\n");
+    }
+}
+main()
+{
+int num, choice;
+    do
+    {
+        printf("\nEnter 1 to insert an element into BST\n");
+        printf("Enter 2 to view all elements of the BST\n");
+        printf("Enter 3 to delete a node that has no child from BST\n");
+printf("Enter 4 to exit\n");
+scanf("%d", &choice);
+        switch(choice)
+        {
+            case 1:
+                printf("\nEnter a number\n");
+                scanf("%d", &num);
+                root = insert(root, num);
+                break;
+            case 2:
+                printf("\nElements of tree are\n");
+                inorder(root);
+                printf("\n");
+                break;
+            case 3:
+                printf("\nEnter value of node to be deleted\n");
+                scanf("%d", &num);
+                del(root, num);
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("\nWrong choice entered\n");
+                break;
+        }
+        printf("\nEnter 0 to continue\n");
+        scanf("%d", &choice);
+    }
+    while(choice == 0);
+}
