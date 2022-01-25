@@ -1,0 +1,136 @@
+#include<stdio.h>
+void quick_sort(int a[], int lower, int upper)
+{
+int pivot, left, right, b;
+if(lower < upper)
+{
+pivot = lower;
+left = lower + 1;
+right = upper;
+while(right >= left)
+{
+            while(a[left] <= a[pivot])
+            {
+                left++;
+            }
+            while(a[right] > a[pivot])
+            {
+                right--;
+            }
+            if(left < right)
+            {
+                b = a[left];
+                a[left] = a[right];
+                a[right] = b;
+            }
+}
+b = a[pivot];
+        a[pivot] = a[right];
+        a[right] = b;
+        pivot = right;
+        quick_sort(a, lower, pivot - 1);
+        quick_sort(a, pivot + 1, upper);
+}
+}
+int main()
+{
+int a[10], l, u, n, i;
+    printf("Enter how many number of elements you want to store in the array\n");
+    scanf("%d", &n);
+    printf("\nEnter %d elements for array\n", n);
+    for(i = 0; i <= n - 1; i++)
+    {
+        scanf("%d", &a[i]);
+    }
+    printf("\nArray before sorting\n");
+    for(i = 0; i <= n - 1; i++)
+    {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+    l = 0;
+    u = n - 1;
+    quick_sort(a, l, u);
+    printf("\nArray after sorting\n");
+    for(i = 0; i <= n - 1; i++)
+    {
+        printf("%d ", a[i]);
+    }
+    return 0;
+}
+
+Merge Sort Program  
+#include<stdio.h>
+void merge_sort(int a[], int lower, int upper)
+{
+int left, right, i, j, mid, b[10];
+    if(lower < upper)
+    {
+        mid = (lower + upper) / 2;
+        merge_sort(a, lower, mid);
+        merge_sort(a, mid + 1, upper);
+left = lower;
+        right = mid + 1;
+        i = lower;
+        while(left <= mid && right <= upper)
+        {
+            if(a[left] <= a[right])
+            {
+                b[i] = a[left];
+                left++;
+            }
+            else
+            {
+                b[i] = a[right];
+                right++;
+            }
+            i++;
+        }
+        if(left > mid)
+        {
+            while(right <= upper)
+            {
+                b[i] = a[right];
+                right++;
+                i++;
+            }
+        }
+        else if(right > upper)
+        {
+            while(left <= mid)
+            {
+                b[i] = a[left];
+                left++;
+                i++;
+            }
+        }
+        for(i = lower; i<= upper; i++)
+        {
+            a[i] = b[i];
+        }
+    }
+}
+int main()
+{
+    int a[10], i, n;
+    printf("\nEnter how many elements you want to store in the array\n");
+    scanf("%d", &n);
+    printf("\nEnter %d elements for array\n", n);
+    for(i = 0;i <= n-1; i++)
+    {
+        scanf("%d", &a[i]);
+    }
+    printf("\nArray before sorting\n");
+    for(i = 0;i <= n-1; i++)
+    {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+    merge_sort(a, 0, n-1);
+    printf("\nArray after sorting\n");
+    for(i = 0; i <= n-1; i++)
+    {
+        printf("%d ", a[i]);
+    }
+    return 0;
+}
