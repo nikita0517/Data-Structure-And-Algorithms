@@ -1,0 +1,83 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define size 10
+#define True 1
+#define False 0
+int edges[size][size], stack[size], top = -1, visited[size];
+void push(int vertex)
+{
+    if(top != size - 1)
+    {
+        top++;
+        stack[top] = vertex;
+    }
+}
+int pop(void)
+{
+int vertex = stack[top];
+    top--;
+    return vertex;
+}
+int empty(void)
+{
+if(top == -1)
+    {
+        return True;
+    }
+    else
+    {
+        return False;
+    }
+}
+void depth_first_search(int vertex, int n)
+{
+   push(vertex);
+   visited[vertex] = True;
+   while(!empty())
+   {
+        vertex = pop();
+        printf("%d ", vertex);
+        for(int i = 1; i <= n; i++)
+        {
+            if(edges[vertex][i] != 0 && !visited[i])
+            {
+                push(i);
+                visited[i] = True;
+            }
+        }
+   }
+}
+void create_graph(int n, int e)
+{
+    for(int i = 1; i <= e; i++)
+    {
+        int s, e;
+        printf("\nEnter starting vertex, ending vertex\n");
+        scanf("%d%d", &s, &e);
+        edges[s][e] = 1;
+    }
+    printf("\nAdjacency matrix\n");
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 1; j <= n; j++)
+        {
+            printf("%d\t", edges[i][j]);
+        }
+        printf("\n");
+    }
+}
+int main()
+{
+    int source_vertex, n, e;
+    printf("\nEnter number of vertices in graph\n");
+    scanf("%d", &n);
+    printf("\nEnter number of edges in graph\n");
+    scanf("%d", &e);
+create_graph(n, e);
+printf("\nEnter the source vertex\n");
+scanf("%d", &source_vertex);
+printf("\nDFS Traversal\n");
+depth_first_search(source_vertex, n);
+printf("\n");
+    return 0;
+}
