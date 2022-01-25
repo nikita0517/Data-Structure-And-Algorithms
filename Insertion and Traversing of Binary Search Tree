@@ -1,0 +1,68 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node
+{
+    struct node *left;
+    int num;
+    struct node *right;
+}node;
+node *root = NULL;
+node * insert(node *pos, int n)
+{
+    if(pos == NULL)
+    {
+        pos = (node *)malloc(sizeof(node));
+        pos->num = n;
+        pos->left = NULL;
+        pos->right = NULL;
+    }
+    else if(n < pos->num)
+    {
+        pos->left = insert(pos->left, n);
+    }
+    else
+    {
+        pos->right = insert(pos->right, n);
+    }
+    return pos;
+}
+void inorder(node *pos)
+{
+if(pos != NULL)
+    {
+        inorder(pos->left);
+        printf("%d ", pos->num);
+        inorder(pos->right);
+    }
+}
+main()
+{
+int num, choice;
+    do
+    {
+        printf("\nEnter 1 to insert an element into tree\n");
+        printf("Enter 2 to traverse all elements of the tree\n");
+        printf("Enter 3 to exit\n");
+        scanf("%d", &choice);
+        switch(choice)
+        {
+            case 1:
+                printf("\nEnter a number\n");
+                scanf("%d", &num);
+                root = insert(root, num);
+                break;
+            case 2:
+                printf("\nElements of tree are\n");
+                inorder(root);
+                printf("\n");
+                break;
+            case 3:
+                exit(0);
+            default:
+                printf("\nWrong choice entered\n");
+        }
+        printf("\nEnter 4 to continue\n");
+        scanf("%d", &choice);
+    }
+    while(choice == 4);
+}
