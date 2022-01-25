@@ -1,0 +1,86 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define size 10
+#define True 1
+#define False 0
+int edges[size][size], visited[size], queue[size], front = -1, rear =- 1;
+void enqueue(int vertex)
+{
+    if(front == -1)
+    {
+        front = 0;
+        rear = 0;
+    }
+    else
+    {
+       rear++;
+    }
+    queue[rear] = vertex;
+}
+int dequeue()
+{
+    int vertex = queue[front];
+    if(front == rear)
+    {
+        front = rear = -1;
+    }
+    else
+    {
+        front++;
+    }
+    return vertex;
+}
+int empty()
+{
+if(front == -1)
+    {
+        return True;
+    }
+    else
+    {
+        return False;
+    }
+}
+void breadth_first_search(int vertex, int n)
+{
+   enqueue(vertex);
+   visited[vertex] = True;
+   while(!empty())
+   {
+        vertex = dequeue();
+        printf("%d ", vertex);
+        for(int i = 1; i <= n; i++)
+        {
+            if(edges[vertex][i] != 0 && !visited[i])
+            {
+                enqueue(i);
+                visited[i] = True;
+            }
+        }
+   }
+}
+void create_graph(int n, int e)
+{
+    for(int i = 1; i <= e; i++)
+    {
+        int s, e;
+        printf("\nEnter starting vertex, ending vertex\n");
+        scanf("%d%d", &s, &e);
+        edges[s][e] = 1;
+    }
+}
+int main()
+{
+    int source_vertex, n, e;
+    printf("\nEnter number of vertices in graph\n");
+    scanf("%d", &n);
+    printf("\nEnter number of edges in graph\n");
+    scanf("%d", &e);
+create_graph(n, e);
+printf("\nEnter the source vertex\n");
+scanf("%d", &source_vertex);
+printf("\nBFS Traversal\n");
+breadth_first_search(source_vertex, n);
+printf("\n");
+    return 0;
+}
