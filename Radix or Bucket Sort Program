@@ -1,0 +1,74 @@
+#include<stdio.h>
+int a[10], length;
+void traverse()
+{
+int i;
+    for(i = 0; i <= length - 1; i++)
+    {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+}
+void bucket_sort()
+{
+int buckets[10][10],bucket_count[10],i,j,k,l,div=1,radix_count=0,largest_num;
+// Finding largest number in the array
+    largest_num = a[0];
+    for(i = 1; i <= length - 1; i++)
+    {
+        if(a[i] > largest_num)
+        {
+            largest_num = a[i];
+        }
+    }
+    // Finding loop count for the radix sort
+    while(largest_num != 0)
+    {
+        radix_count++;
+        largest_num = largest_num / 10;
+    }
+    // Code to sort array using radix or bucket sort
+    for(i = 1; i <= radix_count; i++)
+    {
+        // Initializing counts of all buckets
+        for(j = 0; j <= 9; j++)
+        {
+            bucket_count[j] = 0;
+        }
+        // Putting elements from array to the buckets
+        for(j = 0; j <= length - 1; j++)
+        {
+            k = (a[j] / div) % 10;
+            buckets[k][bucket_count[k]] = a[j];
+            bucket_count[k] = bucket_count[k] + 1;
+        }
+        // Copying elements back from buckets into the array
+        l = 0;
+        for(j = 0; j <= 9; j++)
+        {
+            for(k = 0; k < bucket_count[j]; k++)
+            {
+                a[l] = buckets[j][k];
+                l++;
+            }
+            div = div * 10;
+        }
+    }
+}
+int main()
+{
+int i;
+    printf("\nEnter how many elements you want to store in the array\n");
+    scanf("%d", &length);
+    printf("\nEnter %d elements for array\n", length);
+    for(i = 0; i <= length - 1; i++)
+    {
+        scanf("%d", &a[i]);
+    }
+    printf("\nArray before sorting\n");
+    traverse();
+    bucket_sort();
+    printf("\nArray after sorting\n");
+    traverse();
+    return 0;
+}
