@@ -1,0 +1,112 @@
+#include<stdio.h>
+#include<conio.h>
+#include<stdlib.h>
+struct node
+{
+int num, priority;
+    struct node* next;
+};
+struct node *front = NULL, *rear = NULL;
+void enqueue(void)
+{
+struct node *current = (struct node*)malloc(sizeof(struct node));
+    printf("Enter value and priority\n");
+    scanf("%d%d", &current->num, &current->priority);
+    if(front == NULL)
+    {
+        front = current;
+        rear = current;
+        rear->next = NULL;
+    }
+    else if(current->priority < front->priority)
+    {
+        current->next = front;
+        front = current;
+    }
+    else
+    {
+        struct node *pos = front;
+        while(pos != rear)
+        {
+            if(pos->next->priority > current->priority)
+            {
+                break;
+            }
+            pos = pos->next;
+        }
+        if(pos == rear)
+        {
+            rear->next = current;
+            rear = current;
+            rear->next = NULL;
+        }
+        else
+        {
+            current->next = pos->next;
+            pos->next = current;
+        }
+   }
+}
+void traverse(void)
+{
+if(front != NULL)
+    {
+struct node *pos = front;
+        printf("Elements of priority queue are\n");
+        while(pos != NULL)
+        {
+            printf("%d[priority = %d]\n", pos->num, pos->priority);
+            pos = pos->next;
+        }
+        printf("\n");
+    }
+    else
+    {
+        printf("No element to traverse in priority queue\n");
+    }
+}
+void dequeue(void)
+{
+if(front != NULL)
+    {
+struct node *pos = front;
+        printf("Elements dequeued from priority queue is %d\n", pos->num);
+        front = front->next;
+        free(pos);
+    }
+    else
+    {
+        printf("Priority queue is empty\n");
+    }
+}
+int main()
+{
+int ch;
+    do
+    {
+        printf("Enter 1 to insert in priority queue\n");
+        printf("Enter 2 to traverse elements of priority queue\n");
+        printf("Enter 3 to delete from priority queue\n");
+        printf("Enter 4 to exit\n");
+        scanf("%d", &ch);
+        switch(ch)
+        {
+            case 1:
+                enqueue();
+                break;
+            case 2:
+                traverse();
+                break;
+            case 3:
+                dequeue();
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("wrong choice entered\n");
+        }
+        printf("Enter 0 to continue\n");
+        scanf("%d", &ch);
+    }
+    while(ch == 0);
+}
