@@ -1,0 +1,82 @@
+#include<stdio.h>
+typedef struct edge
+{
+    int start, end, weight;
+}edge;
+void sort(edge edges[], int e)
+{
+    edge temp;
+    for(int i = 1; i <= e - 1; i++)
+    {
+        for(int j = 0; j <= e - 1 - i; j++)
+        {
+            if(edges[j].weight > edges[j + 1].weight)
+            {
+                temp = edges[j];
+                edges[j] = edges[j + 1];
+                edges[j + 1] = temp;
+            }
+        }
+    }
+}
+int find_parent(int vertex, int parent[])
+{
+    if(parent[vertex] == vertex)
+    {
+        return vertex;
+    }
+    return find_parent(parent[vertex], parent);
+}
+void kruskal(edge edges[], int v, int e)
+{
+    sort(edges, e);
+    edge spanning_edges[10];
+    int parent[10];
+    for(int i = 0; i <= v - 1; i++)
+    {
+        parent[i] = i;
+    }
+    for(int i = 0, c = 0; c <= v - 2; i++)
+    {
+        int start_parent = find_parent(edges[i].start, parent);
+        int end_parent = find_parent(edges[i].end, parent);
+        if(start_parent != end_parent)
+        {
+            spanning_edges[c] = edges[i];
+            c++;
+            parent[start_parent] = end_parent;
+        }
+    }
+    printf("Edges selected for MCST\n");
+    for(int i = 0; i < v - 1; i++)
+    {
+        printf("Edge: (%d - %d)\tWeight: %d\n", spanning_edges[i].start,
+        spanning_edges[i].end, spanning_edges[i].weight);
+    }
+}
+main()
+{
+    edge edges[10];
+    int v, e;
+    printf("Enter number of vertices in graph\n");
+    scanf("%d", &v);
+    printf("Enter number of edges in graph\n");
+    scanf("%d", &e);
+    for(int i = 0; i <= e - 1; i++)
+    {
+        printf("Enter start vertex, end vertex and weight of edge\n");
+        scanf("%d%d%d", &edges[i].start, &edges[i].end, &edges[i].weight);
+    }
+    /*printf("Edges of graph before sorting\n");
+    for(int i = 0; i <= e - 1; i++)
+    {
+        printf("%d %d %d\n", edges[i].start, edges[i].end, edges[i].weight);
+    }
+    sort(edges, e);
+    printf("Edges of graph after sorting\n");
+    for(int i = 0; i <= e - 1; i++)
+    {
+        printf("%d %d %d\n", edges[i].start, edges[i].end, edges[i].weight);
+    }*/
+    kruskal(edges, v, e);
+}
