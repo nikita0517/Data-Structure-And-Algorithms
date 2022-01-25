@@ -1,0 +1,164 @@
+#include<stdio.h>
+#include<limits.h>
+int get_min_vertex(int distances[], int visited[], int n)
+{
+    int min = INT_MAX, min_vertex;
+    for(int i = 0; i <= n - 1; i++)
+    {
+        if(!visited[i] && distances[i] < min)
+        {
+            min = distances[i];
+            min_vertex = i;
+        }
+    }
+    return min_vertex;
+}
+void dijkstra(int edges[10][10], int n)
+{
+    int distances[10], visited[10];
+    for(int i = 0; i <= n-1; i++)
+    {
+        distances[i] = INT_MAX;
+        visited[i] = 0;
+    }
+    distances[0] = 0;
+    for(int i = 0; i <= n-1; i++)
+    {
+        int min_vertex = get_min_vertex(distances, visited, n);
+        visited[min_vertex] = 1;
+        for(int j = 0; j <= n-1; j++)
+        {
+            if(edges[min_vertex][j] != 0 && !visited[j])
+            {
+                int distance = distances[min_vertex] + edges[min_vertex][j];
+                if(distance < distances[j])
+                {
+                    distances[j] = distance;
+                }
+            }
+        }
+    }
+    printf("\nVertex\tDistance\n");
+    for(int i = 0; i <= n-1; i++)
+    {
+        printf("%d\t%d\n", i, distances[i]);
+    }
+}
+main()
+{
+    int edges[10][10], n, e;
+    printf("\nEnter number of vertices for graph\n");
+    scanf("%d", &n);
+    for(int i = 0; i <= n; i++)
+    {
+        for(int j = 0; j <= n; j++)
+        {
+            edges[i][j] = 0;
+        }
+    }
+    printf("\nEnter number of edges in graph\n");
+    scanf("%d", &e);
+    for(int i = 1; i <= e; i++)
+    {
+        int s, e, w;
+        printf("\nEnter start vertex, end vertex and their weight\n");
+        scanf("%d%d%d", &s, &e, &w);
+        edges[s][e] = w;
+        edges[e][s] = w;
+    }
+    printf("\nAdjacency matrix\n");
+    for(int i = 0; i <= n-1; i++)
+    {
+        for(int j = 0; j <= n-1; j++)
+        {
+            printf("%d ", edges[i][j]);
+        }
+        printf("\n");
+    }
+    dijkstra(edges, n);
+    return 0;
+}
+
+
+Prism algorithms 
+#include<stdio.h>
+#include<limits.h>
+int get_min_vertex(int weights[], int visited[], int n)
+{
+    int min = INT_MAX, min_vertex;
+    for(int i = 0; i <= n-1; i++)
+    {
+        if(!visited[i] && weights[i] < min)
+        {
+            min = weights[i];
+            min_vertex = i;
+        }
+    }
+    return min_vertex;
+}
+void prims(int edges[10][10], int n)
+{
+    int weights[10], visited[10], parents[10];
+    for(int i = 0; i <= n-1; i++)
+    {
+        weights[i] = INT_MAX;
+        visited[i] = 0;
+    }
+    parents[0] = -1;
+    weights[0] = 0;
+    for(int i = 0; i <= n-1; i++)
+    {
+        int min_vertex = get_min_vertex(weights, visited, n);
+        visited[min_vertex] = 1;
+        for(int j = 0; j <= n-1; j++)
+        {
+            if(edges[min_vertex][j] != 0 && !visited[j])
+            {
+                if(edges[min_vertex][j] < weights[j])
+                {
+                    weights[j] = edges[min_vertex][j];
+                    parents[j] = min_vertex;
+                }
+            }
+        }
+    }
+    printf("\nEdge\tWeight\n");
+    for(int i = 1; i <= n-1; i++)
+    {
+        printf("%d - %d\t%d\n", parents[i], i, weights[i]);
+    }
+}
+int main()
+{
+    int edges[10][10], n, e;
+    printf("\nEnter number of vertices of graph\n");
+    scanf("%d", &n);
+    printf("\nEnter number of edges of graph\n");
+    scanf("%d", &e);
+    for(int i = 0; i <= n-1; i++)
+    {
+        for(int j = 0; j <= n-1; j++)
+        {
+            edges[i][j] = 0;
+        }
+    }
+    for(int i = 1; i <= e; i++)
+    {
+        int s, e, w;
+        printf("\nEnter starting vertex, end vertex and their weight\n");
+        scanf("%d%d%d", &s, &e, &w);
+        edges[s][e] = w;
+        edges[e][s] = w;
+    }
+    printf("\nAdjacency matrix of graph\n");
+    for(int i = 0; i <= n-1; i++)
+    {
+        for(int j = 0; j <= n-1; j++)
+        {
+            printf("%d\t", edges[i][j]);
+        }
+        printf("\n");
+    }
+    prims(edges, n);
+    return 0;
+}
